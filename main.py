@@ -7,13 +7,12 @@ from selenium.common.exceptions import WebDriverException
 import time
 
 
-proxy_file = open('proxies.txt', 'r')
-
-
 def get_proxy(line_num):
-    if not proxy_file.closed:
-        proxy_file.seek(line_num)
-        return proxy_file.readline()
+
+    with open("proxies.txt", 'r') as proxy_file:
+        for line, proxy in enumerate(proxy_file):
+            if line == line_num-1:
+                return proxy
 
 
 def get_profile():
@@ -41,15 +40,13 @@ def load_page():
 
 def proxy_file_length():
 
-    a = proxy_file.read()
-
-    return a.count('\n')
+    with open("proxies.txt", "r") as proxy_file:
+        a = proxy_file.read()
+        return a.count('\n')
 
 my_link = str(raw_input("Enter your link: "))
 
-current_line = 0
-
-proxy_file.seek(0)
+current_line = 1
 
 while not current_line == proxy_file_length() + 1:
 
@@ -80,16 +77,6 @@ while not current_line == proxy_file_length() + 1:
     finally:
         driver.quit()
 
-    time.sleep(5)
+    time.sleep(1)
 
     current_line += 1
-
-proxy_file.close()
-
-
-
-
-
-
-
-
