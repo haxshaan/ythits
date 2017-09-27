@@ -28,35 +28,12 @@ def get_profile():
     f_profile.set_preference('network.proxy.http_port', p_port)
     f_profile.set_preference('network.proxy.ssl', p_host)
     f_profile.set_preference('network.proxy.ssl_port', p_port)
+    f_profile.set_preference('http.response.timeout', 10)
 
     return f_profile
 
 
 def load_page():
-    driver = webdriver.Firefox(firefox_profile=get_profile())
-
-    driver.get("http://whatismyipaddress.com")
-
-
-def proxy_file_length():
-
-    with open("proxies.txt", "r") as proxy_file:
-        a = proxy_file.read()
-        return a.count('\n')
-
-my_link = str(raw_input("Enter your link: "))
-
-current_line = 1
-
-while not current_line == proxy_file_length() + 1:
-
-    print "Current Proxy: ", get_proxy(line_num=current_line)
-
-    print "Now opening the url!"
-
-    print get_proxy(line_num=current_line).split(':')[0]
-    print get_proxy(line_num=current_line).split(':')[1]
-
     try:
         driver = webdriver.Firefox(firefox_profile=get_profile())
 
@@ -76,6 +53,25 @@ while not current_line == proxy_file_length() + 1:
 
     finally:
         driver.quit()
+
+
+def proxy_file_length():
+
+    with open("proxies.txt", "r") as proxy_file:
+        a = proxy_file.read()
+        return a.count('\n')
+
+my_link = str(raw_input("Enter your link: "))
+
+current_line = 1
+
+while not current_line == proxy_file_length() + 1:
+
+    print "Current Proxy: ", get_proxy(line_num=current_line)
+
+    print "Now opening the url!"
+
+    load_page()
 
     time.sleep(1)
 
